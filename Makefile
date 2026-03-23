@@ -14,9 +14,9 @@ bot-down:
 	${DC} -f ${BOT_FILE} ${ENV} down
 
 .PHONY: bot-logs
-bot-logs:
+logs:
 	${LOGS} ${BOT_CONTAINER} -f
 
 .PHONY: bot-shell
-app-shell:
+shell:
 	${EXEC} ${BOT_CONTAINER} bash
