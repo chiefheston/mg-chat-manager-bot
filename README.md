@@ -21,8 +21,8 @@
 1. **Клонируйте репозиторий и перейдите в папку проекта:**
 
     ```bash
-    git clone git@github.com:LevKorobeinikov/MG_BOT.git
-    cd MG_BOT
+    git clone https://github.com/chiefheston/mg-chat-manager-bot.git
+    cd mg-chat-manager-bot
     ```
 2. **Заполниете .env:**
     ```bash
