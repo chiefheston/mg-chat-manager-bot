@@ -1,0 +1,8 @@
+services:
+  mg_telegram_chat_manager_bot:
+    build:
+      dockerfile: Dockerfile
+    container_name: mg_telegram_chat_manager_bot
+    restart: unless-stopped
+    env_file:
+      - .env
