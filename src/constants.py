@@ -1,17 +1,17 @@
 CHAT_INFO = {
-    -1001594892120: {'name': 'Бонусные', 'priority': True},
-    -1002494619929: {'name': 'Заказ пончиков', 'priority': True},
-    -1002258540079: {'name': 'Заказ выпечки', 'priority': True},
-    -1001803643223: {'name': 'Заявка', 'priority': True},
-    -1002877128793: {'name': 'Заказ десертов', 'priority': True},
-    -1001976794685: {'name': 'Итоговая сводка', 'priority': True},
-    -1002001281412: {'name': 'MonkeyLife', 'priority': True},
-    -1001914489981: {'name': 'MonkeyFamily', 'priority': True},
-    -1001599687789: {'name': 'Транзакции', 'priority': False},
-    -1001560241458: {'name': 'Перемещения', 'priority': False},
-    -1001980947382: {'name': 'Накладные', 'priority': False},
-    -1002829503477: {'name': 'Заказ трайфл', 'priority': False},
-    -1002123302396: {'name': 'База знаний', 'priority': False},
+    -1001594892120: {'name': 'Бонусные', 'priority': 2},
+    -1002494619929: {'name': 'Заказ пончиков', 'priority': 2},
+    -1002258540079: {'name': 'Заказ выпечки', 'priority': 2},
+    -1001803643223: {'name': 'Заявка', 'priority': 2},
+    -1002877128793: {'name': 'Заказ десертов', 'priority': 2},
+    -1001976794685: {'name': 'Итоговая сводка', 'priority': 2},
+    -1002001281412: {'name': 'MonkeyLife', 'priority': 2},
+    -1001914489981: {'name': 'MonkeyFamily', 'priority': 2},
+    -1001599687789: {'name': 'Транзакции', 'priority': 1},
+    -1001560241458: {'name': 'Перемещения', 'priority': 1},
+    -1001980947382: {'name': 'Накладные', 'priority': 1},
+    -1002829503477: {'name': 'Заказ трайфл', 'priority': 1},
+    -1002123302396: {'name': 'База знаний', 'priority': 1},
 }
 ADMIN_IDS = [
     930229067,
@@ -51,6 +51,7 @@ JOIN_NOW = (
     'у Telegram лимит\n'
 )
 JOIN_LATER = 'В остальные вступай, завтра!\n'
+JOIN_NEVER = '\n'
 REMOVE_FROM = 'Удалён из:\n— '
 NOT_FOUND_FROM = 'Не найден в:\n— '
 ERRORS_IN = 'Ошибки:\n— '

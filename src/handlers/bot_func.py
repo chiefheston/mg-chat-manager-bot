@@ -18,16 +18,15 @@ from constants import (
     ERRORS_IN,
     GEN_INVITE_FOR_CHATS,
     GIVE_ME_TG_ID,
-    JOIN_LATER,
-    JOIN_NOW,
     NOTHING,
     NOT_FOUND_FROM,
     NO_CHANGE,
     ONLY_ADMIN,
-    PRIORITY,
     REMOVE_FROM,
     USER_ID_NOT_CORRECT,
 )
+from entities import Chat, InviteMessageView
+from enums import ChatPriority
 from states.bot_func import DeleteUserForm, UserForm
 from validators import is_admin
 
@@ -49,11 +48,10 @@ async def get_user_id_check_command(
         return None
 
 
-async def send_invites_to_user(user_id: int) -> Tuple[List[str], List[str]]:
+async def send_invites_to_user(user_id: int) -> Tuple[InviteMessageView, List[str]]:
     """Send invite links to user for all chats."""
-    priority_links: List[str] = []
-    other_links: List[str] = []
     errors: List[str] = []
+    message = InviteMessageView()
     for chat_id, info in CHAT_INFO.items():
         try:
             await bot.unban_chat_member(
@@ -65,32 +63,27 @@ async def send_invites_to_user(user_id: int) -> Tuple[List[str], List[str]]:
                 chat_id=chat_id,
                 expire_date=datetime.now(timezone.utc) + timedelta(days=2),
             )
-            entry = f'{info["name"]}:\n{invite.invite_link}'
-            if info.get(PRIORITY):
-                priority_links.append(entry)
-            else:
-                other_links.append(entry)
+            chat = Chat(
+                invite_link=invite.link,
+                name=info['name'],
+                id=chat_id,
+                priority=ChatPriority(info['priority']),
+            )
+            message.append_chat(chat)
         except TelegramBadRequest as error:
             errors.append(f'{chat_id}: {error.message}')
-    parts: List[str] = []
-    if priority_links:
-        parts.append(
-            JOIN_NOW + '\n'.join(f'— {lnk}' for lnk in priority_links),
-        )
-    if other_links:
-        parts.append(
-            JOIN_LATER + '\n'.join(f'— {lnk}' for lnk in other_links),
-        )
-    if parts:
+    message_text = message.to_text()
+    if message_text is not None:
         try:
             await bot.send_message(
                 chat_id=user_id,
-                text='\n\n'.join(parts),
+                text=message_text,
                 disable_web_page_preview=True,
             )
         except TelegramBadRequest as error:
             errors.append(f'send_message to {user_id}: {error.message}')
-    return priority_links + other_links, errors
+
+    return message, errors
 
 
 @router.callback_query(F.data.startswith(CMD_ADD_USER))
@@ -120,10 +113,10 @@ async def proc_tg_id(
     user_id = await get_user_id_check_command(message)
     if not user_id:
         return
-    invite_links, errors = await send_invites_to_user(user_id)
-    if invite_links:
+    invite_message_view, errors = await send_invites_to_user(user_id)
+    if invite_message_view.get_chats():
         report.append(GEN_INVITE_FOR_CHATS)
-        report.extend(invite_links)
+        report.extend([chat.invite_link for chat in invite_message_view.get_chats()])
     if errors:
         report.append(ERRORS)
         report.extend(errors)
