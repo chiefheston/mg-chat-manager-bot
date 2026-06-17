@@ -34,7 +34,9 @@ class InviteMessageView:
     def to_text(self) -> str | None:
         parts = []
 
-        for priority, chats in self._chats_by_priority.items():
+        for priority, chats in sorted(
+            self._chats_by_priority.items(), key=lambda x: x[0].value, reverse=True
+        ):
             if len(chats) > 0:
                 priority_message = MESSAGE_BY_PRIORITY[priority]
                 part = self._generate_part(priority_message, chats)
